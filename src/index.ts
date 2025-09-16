@@ -1,1 +1,0 @@
-export {trapdoorBlock} from "./trapdoor"

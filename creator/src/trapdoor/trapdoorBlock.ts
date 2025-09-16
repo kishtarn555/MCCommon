@@ -1,5 +1,4 @@
 import { BlockPlugin } from "@kishtarn/mcboilerplate";
-
 interface TrapdoorOptions {
     baseNamespace?:string,
     openSound?: string,

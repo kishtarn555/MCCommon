@@ -1,6 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import json from '@rollup/plugin-json';
 import { dts } from "rollup-plugin-dts";
 
 const ts = typescript();
@@ -16,6 +17,7 @@ export default [{
     plugins: [
         commonjs(),
         nodeResolve(),
+        json(),
         ts
     ]
   },
@@ -30,6 +32,7 @@ export default [{
     plugins: [
         commonjs(),
         nodeResolve(),
+        json(),
         ts,
     ]
   },

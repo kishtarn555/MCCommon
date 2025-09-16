@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/built",
+    "allowJs": true,
+    "target": "es6",
+    "declaration": true,
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
+    "resolveJsonModule": true
+
+  },
+  "include": ["./src/**/*"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "rollup.config.js",
+    "gulpfile.js",
+    "src/**/*.test.ts"
+  ]
+}
