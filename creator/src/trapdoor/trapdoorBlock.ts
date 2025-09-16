@@ -14,7 +14,7 @@ export const trapdoorBlock =(trapdoorOptions: TrapdoorOptions): BlockPlugin => (
     target.setComponent(
         "minecraft:geometry",
         { 
-            identifier: `mccommon:geometry.trapdoor`,                
+            identifier: `geometry.cc_trapdoor`,
             bone_visibility: {
                 open: `q.block_state('${baseNamespace}:open_bit')`,
                 closed: `!q.block_state('${baseNamespace}:open_bit')`
