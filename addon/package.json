@@ -1,0 +1,21 @@
+{
+  "name": "@kishtarn/mccommon-addon",
+  "version": "1.0.0-beta.1",
+  "description": "Common features like openable behaviour and such",
+  "scripts": {
+    "build": "tsc",
+    "build-addon": "npm run build && node dist/index.js & npx gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@kishtarn/mcboilerplate": "^1.0.0-alpha.11"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "del": "^8.0.0",
+    "gulp": "^5.0.1",
+    "typescript": "^5.9.2"
+  }
+}
