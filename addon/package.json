@@ -1,6 +1,6 @@
 {
   "name": "@kishtarn/mccommon-addon",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-alpha.3",
   "description": "Common features like openable behaviour and such",
   "scripts": {
     "build": "tsc",
