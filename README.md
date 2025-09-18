@@ -1,0 +1,10 @@
+This is an extension to generate via code addon blocks that behave as likely to vanilla as possible.
+
+It is meant to be used with package [@kishtarn/mcboilerplate](https://www.npmjs.com/package/@kishtarn/mcboilerplate) as it includes plugins used by these
+
+# How to use
+
+It adds plugins that the user can use with mcboilerplate
+
+
+
