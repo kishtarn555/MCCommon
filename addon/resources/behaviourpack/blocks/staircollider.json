@@ -29,7 +29,13 @@
                 ]
             },
             "minecraft:selection_box" :false,
-            "minecraft:replaceable":{}
+            "minecraft:replaceable":{},
+            "cc:decay": {
+                "tags": [
+                    "cc:stairs"
+                ]
+            },
+            "tag:cc:decayable": {}
         },
         "permutations": [
             {

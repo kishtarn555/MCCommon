@@ -1,6 +1,7 @@
 
 import { system, world } from "@minecraft/server";
 import { StairComponent, updateStair } from "./stairs";
+import { decayBlock, DecayComponent } from "./decay";
 
 const OPEN_STATE = "cc:open_bit"
 
@@ -21,6 +22,7 @@ class OpenableComponent {
 system.beforeEvents.startup.subscribe(initEvent => {
     initEvent.blockComponentRegistry.registerCustomComponent('cc:openable', new OpenableComponent());
     initEvent.blockComponentRegistry.registerCustomComponent('cc:stairs', new StairComponent());
+    initEvent.blockComponentRegistry.registerCustomComponent('cc:decay', new DecayComponent());
 });
 
 const updateBlock = (block) => {
@@ -29,6 +31,9 @@ const updateBlock = (block) => {
     }
     if (block.hasTag("cc:stairs")) {
         updateStair(block);
+    }
+    if (block.hasTag("cc:decayable")) {
+        decayBlock(block, block.getComponent("cc:decay").customComponentParameters.params);
     }
 }
 
