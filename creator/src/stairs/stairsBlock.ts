@@ -1,4 +1,5 @@
 import { BlockPlugin } from "@kishtarn/mcboilerplate";
+import { freezeBlock } from "../freeze/freezableBlock.js";
 interface stairsOptions {
     baseNamespace?:string,
 
@@ -22,6 +23,7 @@ const getCornerVisible = (leftOnDirection: 'east'|'west'|'north'|'south', rightO
 export const stairsBlock =(trapdoorOptions: stairsOptions): BlockPlugin => (target)=> {
     const baseNamespace = trapdoorOptions.baseNamespace ?? "cc";
 
+    target.usePlugin(freezeBlock());
 
     target.setState(`${baseNamespace}:stair_mode`, ["normal", "left_dot", "right_dot", "left_l", "right_l"]);
     target.setComponent(

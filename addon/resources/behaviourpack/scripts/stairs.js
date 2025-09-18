@@ -235,8 +235,13 @@ const createStepCollider = (block, permutation) => {
 
 
 export const updateStair = (block) => {
-    const perm = getStairPermutation(block, block.permutation);
-    block.setPermutation(perm);
+    if (block.permutation.getState("cc:freeze") === "all") {
+        return;
+    }
+    const perm = getStairPermutation(block, block.permutation);    
+    if (block.permutation.getState("cc:freeze") !== "partial") {
+        block.setPermutation(perm);
+    }
     createStepCollider(block.above(), perm);
     
 
