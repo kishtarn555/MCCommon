@@ -8,10 +8,10 @@
                 "is_hidden_in_commands": false
             },
             "states": {
-                "cc:nw": [false, true],
                 "cc:ne": [false, true],
-                "cc:sw": [false, true],
-                "cc:se": [false, true]
+                "cc:nw": [false, true],
+                "cc:se": [false, true],
+                "cc:sw": [false, true]
             }
         },
         "components": {
@@ -32,69 +32,54 @@
         },
         "permutations": [
             {
-                "condition": "!q.block_state('cc:ne') && !q.block_state('cc:nw') && !q.block_state('cc:se') && !q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [0, 0, 0], "size": [0, 0, 0] } }
+                "condition": "!q.block_state('cc:nw') && !q.block_state('cc:ne') && !q.block_state('cc:sw') && !q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [0,0,0], "size": [0,0,0] } }
             },
             {
-                "condition": "q.block_state('cc:ne') && !q.block_state('cc:nw') && !q.block_state('cc:se') && !q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [8, 0.1, 8] } }
+                "condition": "q.block_state('cc:nw') && q.block_state('cc:ne') == q.block_state('cc:sw') && !q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [0,0,-8], "size": [8,0.1,8] } }
             },
             {
-                "condition": "!q.block_state('cc:ne') && q.block_state('cc:nw') && !q.block_state('cc:se') && !q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [0, 0, -8], "size": [8, 0.1, 8] } }
+                "condition": "q.block_state('cc:ne') && q.block_state('cc:nw') == q.block_state('cc:se') && !q.block_state('cc:sw')",
+                "components": { "minecraft:collision_box": { "origin": [-8,0,-8], "size": [8,0.1,8] } }
             },
             {
-                "condition": "!q.block_state('cc:ne') && !q.block_state('cc:nw') && q.block_state('cc:se') && !q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, 0], "size": [8, 0.1, 8] } }
+                "condition": "q.block_state('cc:sw') && q.block_state('cc:se') == q.block_state('cc:nw') && !q.block_state('cc:ne')",
+                "components": { "minecraft:collision_box": { "origin": [0,0,0], "size": [8,0.1,8] } }
             },
             {
-                "condition": "!q.block_state('cc:ne') && !q.block_state('cc:nw') && !q.block_state('cc:se') && q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [0, 0, 0], "size": [8, 0.1, 8] } }
+                "condition": "q.block_state('cc:se') && q.block_state('cc:ne') == q.block_state('cc:sw') && !q.block_state('cc:nw') ",
+                "components": { "minecraft:collision_box": { "origin": [-8,0,0], "size": [8,0.1,8] } }
             },
             {
-                "condition": "q.block_state('cc:ne') && q.block_state('cc:nw') && !q.block_state('cc:se') && !q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 0.1, 8] } }
+                "condition": "q.block_state('cc:nw') && q.block_state('cc:ne') && !q.block_state('cc:sw') && !q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [-8,0,-8], "size": [16,0.1,8] } }
             },
             {
-                "condition": "!q.block_state('cc:ne') && !q.block_state('cc:nw') && q.block_state('cc:se') && q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, 0], "size": [16, 0.1, 8] } }
+                "condition": "!q.block_state('cc:nw') && !q.block_state('cc:ne') && q.block_state('cc:sw') && q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [-8,0,0], "size": [16,0.1,8] } }
             },
             {
-                "condition": "q.block_state('cc:ne') && !q.block_state('cc:nw') && q.block_state('cc:se') && !q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [8, 0.1, 16] } }
+                "condition": "q.block_state('cc:nw') && !q.block_state('cc:ne') && q.block_state('cc:sw') && !q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [0,0,-8], "size": [8,0.1,16] } }
             },
             {
-                "condition": "!q.block_state('cc:ne') && q.block_state('cc:nw') && !q.block_state('cc:se') && q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [0, 0, -8], "size": [8, 0.1, 16] } }
+                "condition": "!q.block_state('cc:nw') && q.block_state('cc:ne') && !q.block_state('cc:sw') && q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [-8,0,-8], "size": [8,0.1,16] } }
             },
             {
-                "condition": "q.block_state('cc:ne') && !q.block_state('cc:nw') && !q.block_state('cc:se') && q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 0.1, 16] } }
+                "condition": "q.block_state('cc:nw') && !q.block_state('cc:ne') && !q.block_state('cc:sw') && q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [-8,0,-8], "size": [16,0.1,16] } }
             },
             {
-                "condition": "!q.block_state('cc:ne') && q.block_state('cc:nw') && q.block_state('cc:se') && !q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 0.1, 16] } }
+                "condition": "!q.block_state('cc:nw') && q.block_state('cc:ne') && q.block_state('cc:sw') && !q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [-8,0,-8], "size": [16,0.1,16] } }
             },
             {
-                "condition": "q.block_state('cc:ne') && q.block_state('cc:nw') && q.block_state('cc:se') && !q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 0.1, 16] } }
-            },
-            {
-                "condition": "q.block_state('cc:ne') && q.block_state('cc:nw') && !q.block_state('cc:se') && q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 0.1, 16] } }
-            },
-            {
-                "condition": "q.block_state('cc:ne') && !q.block_state('cc:nw') && q.block_state('cc:se') && q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 0.1, 16] } }
-            },
-            {
-                "condition": "!q.block_state('cc:ne') && q.block_state('cc:nw') && q.block_state('cc:se') && q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 0.1, 16] } }
-            },
-            {
-                "condition": "q.block_state('cc:ne') && q.block_state('cc:nw') && q.block_state('cc:se') && q.block_state('cc:sw')",
-                "components": { "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 0.1, 16] } }
+                "condition": "q.block_state('cc:nw') && q.block_state('cc:ne') && q.block_state('cc:sw') && q.block_state('cc:se')",
+                "components": { "minecraft:collision_box": { "origin": [-8,0,-8], "size": [16,0.1,16] } }
             }
         ]
+
     }
 }
