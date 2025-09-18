@@ -57,5 +57,9 @@ export const stairsBlock =(trapdoorOptions: stairsOptions): BlockPlugin => (targ
             enabled_states: ["minecraft:vertical_half"] 
         }
     );
+    
+    target.setCustomComponent(
+        "tag:cc:stairs",{}
+    );
 
 }
