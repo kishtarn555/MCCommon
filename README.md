@@ -7,7 +7,9 @@ It is meant to be used with package [@kishtarn/mcboilerplate](https://www.npmjs.
 
 # How to use
 
-It adds plugins that the user can use with mcboilerplate, you'll a
+It adds plugins that the user can use with mcboilerplate.
+
+You'll also need to include the mccommon behaviour and resouce packs as they add the block components, models and util blocks used by this addon
 
 
 
