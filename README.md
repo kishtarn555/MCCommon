@@ -1,6 +1,4 @@
-# Notice
-
-This project is in alpha, as such, no promises are made of how the signature is
+> **Notice** This project is in alpha, as such, no promises are made of how the signature is
 
 
 This is an extension to generate via code addon blocks that behave as likely to vanilla as possible.
