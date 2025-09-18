@@ -62,4 +62,33 @@ export const stairsBlock =(trapdoorOptions: stairsOptions): BlockPlugin => (targ
         "tag:cc:stairs",{}
     );
 
+    let permutations: { condition: string,components: Partial<any>}[] = [
+        {
+            condition: "q.block_state('minecraft:vertical_half') == 'bottom'",
+            components: {
+                "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 8, 16] }
+            }
+        },
+        {
+            condition: "q.block_state('minecraft:vertical_half') == 'top'",
+            components: {
+                "minecraft:collision_box": { "origin": [-8, 8, -8], "size": [16, 8, 16] }
+            }
+        },
+    ]
+
+    if (target.permutations.length === 0) {
+        target.permutations = permutations;
+    } else {
+        target.permutations = target.permutations.flatMap(
+            perm => permutations.map(stairPerms => ({
+                condition: `(${perm.condition}) && ${stairPerms.condition}`,
+                components: {
+                    ...perm.components,
+                    ...stairPerms.components,
+                }
+            }))
+        );
+    }
+
 }
