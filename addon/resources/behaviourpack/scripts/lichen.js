@@ -1,22 +1,3 @@
-import { BlockPermutation } from "@minecraft/server";
-
-import { world,system } from "@minecraft/server";
-
-function debugParticle(x, y, z) {
-    const location = { x, y, z };
-    
-    
-    // spawn a simple vanilla particle (flame)
-    system.run(()=>{
-        const overworld = world.getDimension("overworld");
-        for (let i = 0; i < 1; i++) {
-            
-            // console.error("SPAWNING AT", JSON.stringify(location));
-            overworld.spawnParticle("minecraft:blue_flame_particle", location);
-        }
-    });
-}
-
 const getState = (face) => {
     switch (face) {
         case "Up":
@@ -52,17 +33,44 @@ export class LichenLikeComponent {
                 arg.cancel = true;
                 return;
             }
-
-
-            arg.permutationToPlace = arg.block.permutation.withState(
-                getState(hit.face), true
-            )
+            const states = arg.block.permutation.getAllStates();
+            const state = getState(hit.face);
+            if (state in states && !states[state]) {
+                arg.permutationToPlace = arg.block.permutation.withState(
+                    state, true
+                )
+            } else {
+                const alternative = Object.entries(states).find(([key, value])=> {
+                    if (value) return false;
+                    switch(key) {
+                        case "cc:t": return arg.block.above().isValid && !arg.block.above().isAir
+                        case "cc:b": return arg.block.below().isValid && !arg.block.below().isAir
+                        case "cc:s": return arg.block.north().isValid && !arg.block.north().isAir
+                        case "cc:w": return arg.block.east().isValid && !arg.block.east().isAir
+                        case "cc:n": return arg.block.south().isValid && !arg.block.south().isAir
+                        case "cc:e": return arg.block.west().isValid && !arg.block.west().isAir
+                    }
+                    return false;
+                });
+                if (alternative) {
+                    arg.permutationToPlace = arg.block.permutation.withState(
+                    alternative[0], true
+                )
+                } else {
+                    arg.cancel = true;
+                }
+            }
 
         } else {
-            
-            arg.permutationToPlace = arg.permutationToPlace.withState(
-                getState(arg.face), true
-            )
+            const states = arg.permutationToPlace.getAllStates();
+
+            const state = getState(arg.face);            
+            if (state in states) {
+                arg.permutationToPlace = arg.permutationToPlace.withState(
+                    state, true
+                    
+                )
+            }
         }
     }
 }
