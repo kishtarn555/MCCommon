@@ -1,6 +1,7 @@
 
 import { system, world } from "@minecraft/server";
 import { StairComponent, updateStair } from "./stairs";
+import { LichenLikeComponent } from "./lichen";
 import { decayBlock, DecayComponent } from "./decay";
 
 const OPEN_STATE = "cc:open_bit"
@@ -23,6 +24,7 @@ system.beforeEvents.startup.subscribe(initEvent => {
     initEvent.blockComponentRegistry.registerCustomComponent('cc:openable', new OpenableComponent());
     initEvent.blockComponentRegistry.registerCustomComponent('cc:stairs', new StairComponent());
     initEvent.blockComponentRegistry.registerCustomComponent('cc:decay', new DecayComponent());
+    initEvent.blockComponentRegistry.registerCustomComponent('cc:lichen_like', new LichenLikeComponent());
 });
 
 const updateBlock = (block) => {
