@@ -3,14 +3,13 @@
   "version": "1.0.0-alpha.3",
   "description": "Common features like openable behaviour and such",
   "scripts": {
-    "build": "tsc",
-    "build-addon": "npm run build && node dist/index.js & npx gulp",
+    "build": "tsc && node dist/index.js & npx gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@kishtarn/mcboilerplate": "^1.0.0-alpha.11",
+    "@kishtarn/mcboilerplate": "*",
     "@minecraft/server": "^2.1.0"
   },
   "devDependencies": {

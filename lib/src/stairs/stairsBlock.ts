@@ -28,8 +28,8 @@ export const stairsBlock =(trapdoorOptions: stairsOptions): BlockPlugin => (targ
     if (trapdoorOptions.freezable) {
         target.usePlugin(freezeBlock());
     }
-
-    target.setState(`${baseNamespace}:stair_mode`, ["normal", "left_dot", "right_dot", "left_l", "right_l"]);
+    const VALID_STAIR_MODE = ["normal", "left_dot", "right_dot", "left_l", "right_l"]
+    target.setState(`${baseNamespace}:stair_mode`, VALID_STAIR_MODE);
     target.setComponent(
         "minecraft:geometry",
         { 
@@ -68,19 +68,47 @@ export const stairsBlock =(trapdoorOptions: stairsOptions): BlockPlugin => (targ
         "tag:cc:stairs",{}
     );
 
+    const sizeToState: Record<string, [[number, number], [number, number, number]]> = {
+        "normal": [[-8,-8], [8, 8, 16]],
+        "left_dot": [[-8,-8], [8, 8, 8]],
+        "right_dot": [[-8,0], [8, 8, 8]],
+        "left_l": [[-8,-8], [16, 8, 8]],
+        "right_l": [[-8,0], [16, 8, 8]],
+    }
+
     let permutations: { condition: string,components: Partial<any>}[] = [
-        {
-            condition: "q.block_state('minecraft:vertical_half') == 'bottom'",
-            components: {
-                "minecraft:collision_box": { "origin": [-8, 0, -8], "size": [16, 8, 16] }
-            }
-        },
-        {
-            condition: "q.block_state('minecraft:vertical_half') == 'top'",
-            components: {
-                "minecraft:collision_box": { "origin": [-8, 8, -8], "size": [16, 8, 16] }
-            }
-        },
+        ...VALID_STAIR_MODE.flatMap(stair_mode => [
+            {
+                condition: `q.block_state('minecraft:vertical_half') == 'bottom' && ${baseNamespace}:stair_mode == '${stair_mode}'`,
+                components: {
+                    "minecraft:collision_box": [
+                        { "origin": [-8, 0, -8], "size": [16, 8, 16] },
+                        { 
+                            "origin": [
+                                sizeToState[stair_mode][0][0], 8, sizeToState[stair_mode][0][1]
+                            ], 
+                            size: sizeToState[stair_mode][1]
+                        }
+
+                    ]
+                }
+            },
+            {
+                condition: `q.block_state('minecraft:vertical_half') == 'top' && ${baseNamespace}:stair_mode == '${stair_mode}'`,
+                components: {
+                    "minecraft:collision_box": [
+                        { "origin": [-8, 8, -8], "size": [16, 8, 16] },
+                        { 
+                            "origin": [
+                                sizeToState[stair_mode][0][0], 0, sizeToState[stair_mode][0][1]
+                            ], 
+                            size: sizeToState[stair_mode][1]
+                        }
+
+                    ]
+                }
+            },
+        ]),
     ]
 
     if (target.permutations.length === 0) {

@@ -1,6 +1,6 @@
 import { BlockPlugin } from "@kishtarn/mcboilerplate";
 
-type sideMode = "optional" | "show" | "hide";
+type sideMode = "optional" | "show" | "hide" | "ignore";
 interface LichenLikeOptions {
     north?: sideMode
     south?: sideMode
@@ -9,6 +9,8 @@ interface LichenLikeOptions {
     down?: sideMode
     up?: sideMode
     unreplaceable?: boolean
+    selectionBoxSize?: number
+    customModelIdentifier?: string,
 };
 
 export const LichenLikeBlock =(options: LichenLikeOptions): BlockPlugin => (target)=> {    
@@ -25,17 +27,29 @@ export const LichenLikeBlock =(options: LichenLikeOptions): BlockPlugin => (targ
     if (west === "optional") target.setState("cc:w", [false, true]);
     if (down === "optional") target.setState("cc:b", [false, true]);
     if (up === "optional") target.setState("cc:t", [false, true]);
+    const getBoneVisibility = (name: string, option : sideMode) => {
+        if (option === "show") {
+            return true;
+        }
+        if (option === "optional") {
+            return `q.block_state('${name}')`;
+        }
+        if (option === "hide") {
+            return false;
+        }
+        return undefined;
+    }
     target.setComponent(
         "minecraft:geometry", 
         {
-            identifier: "geometry.cc_lichen",
+            identifier: options.customModelIdentifier ?? "geometry.cc_lichen",
             bone_visibility: {
-                "north": north === "optional" ? "q.block_state('cc:n')" : north === "show",
-                "east": east === "optional" ? "q.block_state('cc:e')" : east === "show",
-                "south": south === "optional" ? "q.block_state('cc:s')" : south === "show",
-                "west": west === "optional" ? "q.block_state('cc:w')" : west === "show",
-                "down": down === "optional" ? "q.block_state('cc:b')" : down === "show",
-                "up": up === "optional" ? "q.block_state('cc:t')" : up === "show",
+                "north": getBoneVisibility('cc:n', north),
+                "east": getBoneVisibility('cc:e', east),
+                "south": getBoneVisibility('cc:s', south),
+                "west": getBoneVisibility('cc:w', west),
+                "down": getBoneVisibility('cc:b', down),
+                "up": getBoneVisibility('cc:t', up),
             }
         }
     )
@@ -67,25 +81,26 @@ export const LichenLikeBlock =(options: LichenLikeOptions): BlockPlugin => (targ
 
         const result = trueKeys.length === 1 ? trueKeys[0] : "all";
         let box;
+        const selectionBoxSize = options.selectionBoxSize ?? 1;
         
         switch (result) {
         case "b":
-            box = { origin: [-8, 0, -8], size: [16, 1, 16] };
+            box = { origin: [-8, 0, -8], size: [16, selectionBoxSize, 16] };
             break;
         case "t":
-            box = { origin: [-8, 15, -8], size: [16, 1, 16] };
+            box = { origin: [-8, 16-selectionBoxSize, -8], size: [16, selectionBoxSize, 16] };
             break;
         case "n":
-            box = { origin: [-8, 0, 7], size: [16, 16, 1] };
+            box = { origin: [-8, 0, 8-selectionBoxSize], size: [16, 16, selectionBoxSize] };
             break;
         case "s":
-            box = { origin: [-8, 0, -8], size: [16, 16, 1] };
+            box = { origin: [-8, 0, -8], size: [16, 16, selectionBoxSize] };
             break;
         case "e":
-            box = { origin: [7, 0, -8], size: [1, 16, 16] };
+            box = { origin: [8-selectionBoxSize, 0, -8], size: [selectionBoxSize, 16, 16] };
             break;
         case "w":
-            box = { origin: [-8, 0, -8], size: [1, 16, 16] };
+            box = { origin: [-8, 0, -8], size: [selectionBoxSize, 16, 16] };
             break;
         case "all":
             box = { origin: [-8, 0, -8], size: [16, 16, 16] };
