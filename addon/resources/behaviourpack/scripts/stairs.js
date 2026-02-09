@@ -158,80 +158,6 @@ const getStairPermutation = (block, permutation) => {
     return permutation.withState("cc:stair_mode", "normal");
 }
 
-const createStepCollider = (block, permutation) => {
-    system.run(()=> {
-        if (!block.isValid) return;
-        if (!block.isAir && block.type.id !== "cc:staircollider") return;
-        const dir = permutation.getState("minecraft:cardinal_direction");
-        const side = permutation.getState("minecraft:vertical_half");
-        const stair = permutation.getState("cc:stair_mode");
-
-        let response = BlockPermutation.resolve("cc:staircollider",)
-
-        if (side !== "bottom") return;
-        if (dir === "south") {
-            if (stair === "normal" || stair === "left_dot" || stair === "right_l") {
-                response = response.withState("cc:nw", true);
-            }
-            if (stair === "normal" || stair === "right_dot" || stair === "left_l") {
-                response = response.withState("cc:ne", true);
-            }
-            if (stair === "left_l") {
-                response = response.withState("cc:nw", true);
-            }
-            if (stair === "right_l") {
-                response = response.withState("cc:ne", true);
-            }
-        }
-        if (dir === "north") {
-            if (stair === "normal" || stair === "left_dot" || stair === "right_l") {
-                response = response.withState("cc:se", true);
-            }
-            if (stair === "normal" || stair === "right_dot" || stair === "left_l") {
-                response = response.withState("cc:sw", true);
-            }
-            if (stair === "left_l") {
-                response = response.withState("cc:se", true);
-            }            
-            if (stair === "right_l") {
-                response = response.withState("cc:sw", true);
-            }
-        }
-        
-        if (dir === "west") {
-            if (stair === "normal" || stair === "left_dot" || stair === "right_l") {
-                response = response.withState("cc:ne", true);
-            }
-            if (stair === "normal" || stair === "right_dot" || stair === "left_l") {
-                response = response.withState("cc:se", true);
-            }
-            if (stair === "left_l") {
-                response = response.withState("cc:ne", true);
-            }            
-            if (stair === "right_l") {
-                response = response.withState("cc:se", true);
-            }
-        }
-        
-        if (dir === "east") {
-            if (stair === "normal" || stair === "left_dot" || stair === "right_l") {
-                response = response.withState("cc:sw", true);
-            }
-            if (stair === "normal" || stair === "right_dot" || stair === "left_l") {
-                response = response.withState("cc:nw", true);
-            }
-            if (stair === "left_l") {
-                response = response.withState("cc:sw", true);
-            }            
-            if (stair === "right_l") {
-                response = response.withState("cc:nw", true);
-            }
-        }
-
-        block.setPermutation(response);
-    });
-}
-
 
 
 export const updateStair = (block) => {
@@ -242,7 +168,6 @@ export const updateStair = (block) => {
     if (block.permutation.getState("cc:freeze") !== "partial") {
         block.setPermutation(perm);
     }
-    createStepCollider(block.above(), perm);
     
 
 }
@@ -250,7 +175,6 @@ export class StairComponent {
     beforeOnPlayerPlace(arg, p) {
         const perm = getStairPermutation(arg.block, arg.permutationToPlace);
         arg.permutationToPlace = perm;
-        createStepCollider(arg.block.above(), perm);
     }
 
     onPlayerBreak(arg, p) {

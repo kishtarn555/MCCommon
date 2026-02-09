@@ -8,6 +8,8 @@ interface stairsOptions {
 
 }
 
+type CollisionData = [[number, number], [number, number, number]];
+
 const getCornerVisible = (leftOnDirection: 'east'|'west'|'north'|'south', rightOnDirection: 'east'|'west'|'north'|'south', baseNamespace: string) => {
     const oposite  = {
         'north': 'south',
@@ -23,12 +25,41 @@ const getCornerVisible = (leftOnDirection: 'east'|'west'|'north'|'south', rightO
     );
 }
 
+const rotatePoint = (x: number, z: number, rot: string) => {
+  switch (rot) {
+      case "north":   return [ x,  z];
+      case "west":  return [-z,  x];
+      case "south": return [-x, -z];
+      case "east": return [ z, -x];
+  }
+};
+
+const rotateCollider = (info : CollisionData, rotation: string): CollisionData => {
+    const corners :[number, number][] = [
+        info[0],
+        [info[0][0]+info[1][0] ,    info[0][1]],
+        [info[0][0] ,               info[0][1]+info[1][2]],
+        [info[0][0]+info[1][0] ,    info[0][1]+info[1][2]],
+    ]
+    const rotated = corners.map(p => rotatePoint(p[0], p[1], rotation));
+    const xs = rotated.map(p => p[0]);
+    const zs = rotated.map(p => p[1]);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minZ = Math.min(...zs);
+    const maxZ = Math.max(...zs);
+    return [
+        [minX, minZ], [maxX-minX,info[1][1],maxZ-minZ]
+    ]
+}
+
 export const stairsBlock =(trapdoorOptions: stairsOptions): BlockPlugin => (target)=> {
     const baseNamespace = "cc";
     if (trapdoorOptions.freezable) {
         target.usePlugin(freezeBlock());
     }
     const VALID_STAIR_MODE = ["normal", "left_dot", "right_dot", "left_l", "right_l"]
+    const ORIENTATION = ["north", "east", "west", "south"]
     target.setState(`${baseNamespace}:stair_mode`, VALID_STAIR_MODE);
     target.setComponent(
         "minecraft:geometry",
@@ -68,47 +99,58 @@ export const stairsBlock =(trapdoorOptions: stairsOptions): BlockPlugin => (targ
         "tag:cc:stairs",{}
     );
 
-    const sizeToState: Record<string, [[number, number], [number, number, number]]> = {
-        "normal": [[-8,-8], [8, 8, 16]],
-        "left_dot": [[-8,-8], [8, 8, 8]],
-        "right_dot": [[-8,0], [8, 8, 8]],
-        "left_l": [[-8,-8], [16, 8, 8]],
-        "right_l": [[-8,0], [16, 8, 8]],
+    const sizeToState: Record<string, CollisionData[]> = {
+        "normal": [[[-8,0], [16, 8, 8]]],
+        "left_dot": [[[-8,0], [8, 8, 8]]],
+        "right_dot":[ [[0,0], [8, 8, 8]]],
+        "left_l": [
+            [[-8,0], [16, 8, 8]],
+            [[0,-8], [8, 8, 8]]
+        ],
+        "right_l": [
+            [[-8,0], [16, 8, 8]],
+            [[-8,-8], [8, 8, 8]]
+        ],
     }
 
     let permutations: { condition: string,components: Partial<any>}[] = [
-        ...VALID_STAIR_MODE.flatMap(stair_mode => [
+        ...VALID_STAIR_MODE.flatMap( stair_mode =>  ORIENTATION.flatMap(orientation=> [
             {
-                condition: `q.block_state('minecraft:vertical_half') == 'bottom' && ${baseNamespace}:stair_mode == '${stair_mode}'`,
+                condition: `q.block_state('minecraft:vertical_half') == 'bottom' && q.block_state('${baseNamespace}:stair_mode') == '${stair_mode}' && q.block_state('minecraft:cardinal_direction') == '${orientation}'`,
                 components: {
                     "minecraft:collision_box": [
                         { "origin": [-8, 0, -8], "size": [16, 8, 16] },
-                        { 
+                        ...sizeToState[stair_mode].map(current_size => {
+                            const curr = rotateCollider(current_size, orientation)
+                            return { 
                             "origin": [
-                                sizeToState[stair_mode][0][0], 8, sizeToState[stair_mode][0][1]
+                                curr[0][0], 8, curr[0][1]
                             ], 
-                            size: sizeToState[stair_mode][1]
-                        }
-
+                            size: curr[1]
+                            };
+                        })
                     ]
                 }
             },
-            {
-                condition: `q.block_state('minecraft:vertical_half') == 'top' && ${baseNamespace}:stair_mode == '${stair_mode}'`,
+            { 
+                condition: `q.block_state('minecraft:vertical_half') == 'top' && q.block_state('${baseNamespace}:stair_mode') == '${stair_mode}' && q.block_state('minecraft:cardinal_direction') == '${orientation}'`,
                 components: {
                     "minecraft:collision_box": [
                         { "origin": [-8, 8, -8], "size": [16, 8, 16] },
-                        { 
+                        ...sizeToState[stair_mode].map(current_size => {
+                            const curr = rotateCollider(current_size, orientation)
+                            return { 
                             "origin": [
-                                sizeToState[stair_mode][0][0], 0, sizeToState[stair_mode][0][1]
+                                curr[0][0], 0, curr[0][1]
                             ], 
-                            size: sizeToState[stair_mode][1]
-                        }
+                            size: curr[1]
+                            };
+                        })
 
                     ]
                 }
             },
-        ]),
+        ])),
     ]
 
     if (target.permutations.length === 0) {
